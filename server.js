@@ -1,10 +1,10 @@
 import { WebSocketServer } from "ws";
 import fs from "fs/promises";
 import { write } from "fs";
-// console.log(new URL("http://g.c/api?id=123").searchParams);
+// console.console.log(new URL("http://g.c/api?id=123").searchParams);
 
 let file;
-fs.open("log.txt", "w").then(_ => file = _);
+fs.open("console.log.txt", "w").then(_ => file = _);
 
 const socket = new WebSocketServer({
   path: "/api",
@@ -15,13 +15,13 @@ socket.on("connection", (soc, req) => {
   const params = new URL("http:/g.c" + req.url).searchParams;
   if (params.has('p_id')) {
     soc.id = params.get("p_id")
-    log({ [soc.id]: " joined" });
+    console.log({ [soc.id]: " joined" });
     // sendAll(JSON.stringify({
     //   "f_id": soc.id
     // }), soc.id);
   }
   soc.on("message", (data) => {
-    // console.log(req.url);
+    // console.console.console.log(req.url);
     // if (params.has('t_id')) {
     //   for (let s of socket.clients) {
     //     if (s.id == params.get('t_id')) {
@@ -38,24 +38,24 @@ socket.on("connection", (soc, req) => {
       for (let s of socket.clients) {
         if (s.id == obj.t_id) {
           s.send(JSON.stringify(obj));
-          log({ [soc.id]: obj })
+          console.log({ [soc.id]: obj })
           break;
         }
       }
     } else {
       sendAll(JSON.stringify(obj), soc.id)
-      log({ [soc.id]: obj });
+      console.log({ [soc.id]: obj });
     }
     // }
     // if (soc.id == undefined) {
     //   const m = JSON.parse(data.toString());
-    //   console.log("json", m);
+    //   console.console.log("json", m);
     //   if (m["p_id"]) {
     //     soc.id = m["p_id"];
-    //     console.log("Added peer ", soc.id);
+    //     console.console.log("Added peer ", soc.id);
     //   }
     // }
-    // console.log(req.url);
+    // console.console.log(req.url);
   })
   soc.on("close", () => {
     sendAll(JSON.stringify({
@@ -69,23 +69,16 @@ function sendAll(message = "", except) {
   if (except) {
     socket.clients.forEach(s => {
       if (s.id != except) s.send(message, (e) => {
-        if (e) { log(e); }
+        if (e) { console.log(e); }
       });
     });
   } else {
     socket.clients.forEach(s => s.send(message, (e) => {
       if (e) {
-        log(e)
+        console.log(e)
       }
     }));
   }
-}
-
-function log(data) {
-  let str = JSON.stringify(data);
-  console.log(str);
-  // let f = await fs.open("");
-  file.appendFile(str + '\n');
 }
 
 
